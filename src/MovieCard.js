@@ -1,8 +1,6 @@
+  
 import React from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
-import { Card } from "react-bootstrap";
-import { Button } from "react-bootstrap";
-import "./App.css";
+import { Link } from "react-router-dom";
 import StarRatingComponent from "react-star-rating-component";
 
 
@@ -11,23 +9,43 @@ const MovieCard = ({ movie }) => {
   
 
   return (
-    <div className="ccc">
-      <Card className="Card" >
-        <Card.Img style={{width: 200, height:150}} src={movie.image} />
-        <Card.Body>
-          <Card.Title style={{color :"#FFFfff"}}>{movie.title}</Card.Title>
-          <Card.Text style={{color :"#FFFfff"}}>{movie.description}</Card.Text>
-         <button> <a variant="primary" href={movie.url} target="_blank">Watch Trailer</a></button>
+    <div
+      className="col-12 movie_card my-2"
+      style={{
+        backgroundImage: `linear-gradient(135deg,white, rgba(255,255,255,.1)), url(${
+          movie.second_img || backUp
+        })`,
+      }}
+    >
+      <div className="left_side">
+        <div className="left_side_inner">
+          <img src={movie.main_img || mainBackUp} alt="pic" />
           <div>
+            <h1>
+              {movie.title}{" "}
+              <Link to={`/trailer/${movie.title}`} className="button">
+                Trailer
+              </Link>
+            </h1>
+
+            <p>{movie.date}</p>
+            <div className="d-flex">
+              <p className="duration mr-2">{movie.duration}</p>
+              <p>{movie.genre}</p>
+            </div>
             <StarRatingComponent
-              name={movie.title}
-              editing={false}
+              name="rate1"
+              starCount={5}
               value={movie.rate}
             />
           </div>
-        </Card.Body>
-      </Card>
+        </div>
+        <div>
+          <p className="description">{movie.description}</p>
+        </div>
+      </div>
     </div>
   );
 };
+
 export default MovieCard;

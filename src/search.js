@@ -1,23 +1,24 @@
-import React from 'react'
-import StarRatingComponent from 'react-star-rating-component';
+import React from "react";
+import StarRatingComponent from "react-star-rating-component";
 
+export const Search = ({ search, setRate, newRate }) => {
+  const onStarClick = (nextValue, prevValue, name) => {
+    setRate(nextValue);
+  };
 
-
-function Recherche(props) {
-
-   const handleChange = (e) => 
-    props.setFilter({...props.filter,text:e.target.value} )
-    
-    return (
-        <div className='aaa'>
-            <input
-                type="text"
-                placeholder="Search"
-                onChange ={handleChange}
-            />
-            <StarRatingComponent onStarClick={(nextValue, prevValue, name)=>props.setFilter({...props.filter,star:nextValue} )}/>
-        </div>
-    )
-}
-
-export default Recherche;
+  return (
+    <div className="search my-4">
+      <input
+        type="text"
+        placeholder="Search a movie"
+        onChange={(e) => search(e.target.value)}
+      />
+      <StarRatingComponent
+        name="rate1"
+        starCount={5}
+        value={newRate}
+        onStarClick={onStarClick}
+      />
+    </div>
+  );
+};

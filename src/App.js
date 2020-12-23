@@ -1,11 +1,10 @@
 import React, { useState } from "react";
 import "./App.css";
-import "./index.css";
-import MovieList from "./MovieList";
-import Recherche from "./search";
-import AddMovie from "./AddMovie";
-import "bootstrap/dist/css/bootstrap.min.css";
-
+import { MovieList } from "./MovieList";
+import { Search } from "./Search";
+import Trailer from "./Trailer";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+import ReactPlayer from "react-player";
  
 
 function App(props) {
@@ -20,9 +19,10 @@ function App(props) {
     star: 0,
   });
 
-  const [movies, setMovies] = useState([
-    {
-      image:
+  function App() {
+    const [movies, setMovies] = useState([
+      {
+        main_img:
         "https://radradio.com/wp-content/uploads/jumanji-next-level-951x548.jpg",
         width: 500,
       title: " Jumanji",
@@ -31,7 +31,7 @@ function App(props) {
       rate: 5,
     },
     {
-      image:
+      main_img:
         "https://tecake.com/wp-content/uploads/2020/05/Bad-Boys-for-Life-2020.jpg",
         width: 500,
       title: "Bad Boys 2020",
@@ -40,7 +40,7 @@ function App(props) {
       rate: 4,
     },
     {
-      image:
+      main_img:
         "https://fr.web.img6.acsta.net/newsv7/20/11/19/16/54/0428582.jpg",
         width: 500,
       title: "Wonder Woman",
@@ -49,7 +49,7 @@ function App(props) {
       rate: 3,
     },
     {
-      image:
+      main_img:
         "https://ctr.cdnartwhere.eu/sites/demo/files/styles/manual_crop/public/2020-10/Encadre1-Coup-de-coeur-Clouds-Disney.jpg",
       title: "Clouds",
       description: "Romance/Drama",
@@ -57,29 +57,43 @@ function App(props) {
       rate: 2,
     },
   ]);
+  const [keyword, setKeyword] = useState("");
+  const [newRate, setNewRate] = useState(1);
+
+  const search = (text) => {
+    setKeyword(text);
+  };
+
+  const setRate = (rate) => {
+    setNewRate(rate);
+  };
+
   const addMovie = (movie) => {
     setMovies(movies.concat(movie));
   };
 
-
   return (
-    <div className="App">
-      <br />
-      <MovieList
-      
-        movies={movies.filter(
-          (e) =>
-            e.title.toLowerCase().includes(filter.text.toLowerCase()) &&
-            e.rate >= filter.star
-        )}
-      />
-      <AddMovie AddMovie={setMovies} films={movies} />
-      <Recherche setFilter={setFilter} filter={filter} />
-      {console.log(filter)}
+    <Router>
+      <div className="container">
+        
+        <Search search={search} setRate={setRate} newRate={newRate} />
+        
+        <MovieList
+          addMovie={addMovie}
+          movies={movies.filter(
+            (movie) =>
+              movie.rate >= newRate &&
+              movie.title.toLowerCase().includes(keyword.toLowerCase().trim())
+          )}/>
 
-      {console.log(movie)}
-    </div>
+        <Route
+          path="/trailer/:name"
+          render={(props) => <Trailer {...props} listMovies={movies} />}
+        />
+      </div>
+      {/* <Route path="/trailer" component={Trailer} /> */}
+    </Router>
   );
-}
+}}
 
 export default App;
